@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 class ImageStack;
+class ImageStackListModel;
 
 namespace Ui {
 class MainWindow;
@@ -24,6 +25,7 @@ private:
     Ui::MainWindow *ui;
 
     ImageStack *m_images;
+    ImageStackListModel *m_imageListView;
 };
 
 #endif // MAINWINDOW_H

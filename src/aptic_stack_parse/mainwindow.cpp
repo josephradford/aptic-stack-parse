@@ -5,6 +5,7 @@
 #include <QtDebug>
 
 #include "imagestack.h"
+#include "imagestacklistmodel.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle(QString("APTIC file parser"));
 
     m_images = new ImageStack();
+    m_imageListView = new ImageStackListModel();
+    ui->listViewFiles->setModel(m_imageListView);
 }
 
 MainWindow::~MainWindow()
@@ -31,5 +34,6 @@ void MainWindow::on_actionOpen_triggered()
                               "Images (*.png *.xpm *.jpg *.tif)");
 
     m_images->setFileNames(files);
+    m_imageListView->updateStack(m_images);
     ui->statusBar->clearMessage();
 }
