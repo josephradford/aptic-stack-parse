@@ -48,3 +48,18 @@ void ImageStackListModel::updateStack(ImageStack *stack)
     m_stack = stack;
     emit layoutChanged();
 }
+
+ImageObject *ImageStackListModel::imageData(const QModelIndex &index) const
+{
+    if (!m_stack) {
+        // this not valid, return empty variant
+        return 0;
+    }
+
+    if (index.row() >= this->rowCount(index)) {
+        // row is too big.
+        return 0;
+    }
+
+    return m_stack->imageAt(index.row());
+}

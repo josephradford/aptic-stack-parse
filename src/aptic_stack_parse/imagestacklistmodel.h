@@ -4,6 +4,7 @@
 #include <QAbstractListModel>
 
 class ImageStack;
+class ImageObject;
 
 class ImageStackListModel : public QAbstractListModel
 {
@@ -14,6 +15,8 @@ public:
     int rowCount(const QModelIndex &parent) const;
 
     void updateStack(ImageStack *stack);
+
+    ImageObject * imageData(const QModelIndex &index) const;
 private:
     ImageStack *m_stack;
 };
