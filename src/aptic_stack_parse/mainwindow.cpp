@@ -3,6 +3,7 @@
 
 #include <QFileDialog>
 #include <QtDebug>
+#include <QSettings>
 
 #include "imagestack.h"
 #include "imagestacklistmodel.h"
@@ -14,6 +15,15 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle(QString("APTIC file parser"));
+
+    // set up the application and settings
+    QCoreApplication::setOrganizationName("JORA");
+    QCoreApplication::setOrganizationDomain("jora.io");
+    QCoreApplication::setApplicationName("APTIC Image Parser");
+    QSettings settings;
+
+    m_lastOpenDir = settings.value("filemanager/openDir", "/home").toString();
+
 
     m_images = new ImageStack();
     m_imageListView = new ImageStackListModel();
@@ -32,11 +42,15 @@ void MainWindow::on_actionOpen_triggered()
 {
     // confirm we are opening by updating status
     ui->statusBar->showMessage(tr("Selecting files..."), 4000);
+
+    // clear any photos on display
+    ui->lblSelectedFile->clear();
+
     // open the file dialog
     QStringList files = QFileDialog::getOpenFileNames(
                               this,
                               "Select one or more files to open",
-                              "/home",
+                              m_lastOpenDir,
                               "Images (*.png *.xpm *.jpg *.tif)");
 
     // renew the stack
@@ -47,6 +61,14 @@ void MainWindow::on_actionOpen_triggered()
 
     // clear the status bar
     ui->statusBar->clearMessage();
+
+    // save the directory
+    if (files.count()) {
+        m_lastOpenDir = files.first();
+
+        QSettings settings;
+        settings.setValue("filemanager/openDir", m_lastOpenDir);
+    }
 }
 
 

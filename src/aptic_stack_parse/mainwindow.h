@@ -27,6 +27,8 @@ private:
 
     ImageStack *m_images;
     ImageStackListModel *m_imageListView;
+
+    QString m_lastOpenDir;
 };
 
 #endif // MAINWINDOW_H
