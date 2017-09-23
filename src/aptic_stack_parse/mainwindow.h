@@ -21,6 +21,8 @@ public:
 private slots:
     void on_actionOpen_triggered();
 
+    void on_listViewFiles_clicked(const QModelIndex &index);
+
 private:
     Ui::MainWindow *ui;
 

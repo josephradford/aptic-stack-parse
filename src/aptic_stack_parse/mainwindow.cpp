@@ -6,6 +6,7 @@
 
 #include "imagestack.h"
 #include "imagestacklistmodel.h"
+#include "imageobject.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -36,4 +37,19 @@ void MainWindow::on_actionOpen_triggered()
     m_images->setFileNames(files);
     m_imageListView->updateStack(m_images);
     ui->statusBar->clearMessage();
+}
+
+void MainWindow::on_listViewFiles_clicked(const QModelIndex &index)
+{
+    ImageObject *image = m_imageListView->imageData(index);
+
+    if (!image) {
+        // not a valid entry in the list
+        return;
+    }
+
+    // display filename in status bar for confirmation
+    ui->statusBar->showMessage(QString("Selected %1").arg(image->filename()), 4000);
+
+
 }
