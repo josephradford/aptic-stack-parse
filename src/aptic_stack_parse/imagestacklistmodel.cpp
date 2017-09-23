@@ -22,7 +22,7 @@ QVariant ImageStackListModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    return QVariant(image->filename());
+    return QVariant(image->displayName());
 }
 
 int ImageStackListModel::rowCount(const QModelIndex &parent) const
