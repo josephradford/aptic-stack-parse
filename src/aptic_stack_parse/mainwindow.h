@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+class ImageStack;
+
 namespace Ui {
 class MainWindow;
 }
@@ -20,6 +22,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
+    ImageStack *m_images;
 };
 
 #endif // MAINWINDOW_H

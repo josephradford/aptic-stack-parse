@@ -4,12 +4,16 @@
 #include <QFileDialog>
 #include <QtDebug>
 
+#include "imagestack.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     this->setWindowTitle(QString("APTIC file parser"));
+
+    m_images = new ImageStack();
 }
 
 MainWindow::~MainWindow()
@@ -25,5 +29,6 @@ void MainWindow::on_actionOpen_triggered()
                               "/home",
                               "Images (*.png *.xpm *.jpg *.tif)");
 
+    m_images->setFileNames(files);
     qDebug() << files;
 }
