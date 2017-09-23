@@ -23,6 +23,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpen_triggered()
 {
+    ui->statusBar->showMessage(tr("Selecting files..."), 4000);
     QStringList files = QFileDialog::getOpenFileNames(
                               this,
                               "Select one or more files to open",
@@ -30,5 +31,5 @@ void MainWindow::on_actionOpen_triggered()
                               "Images (*.png *.xpm *.jpg *.tif)");
 
     m_images->setFileNames(files);
-    qDebug() << files;
+    ui->statusBar->clearMessage();
 }
