@@ -55,4 +55,7 @@ void MainWindow::setFileListSelected(const QModelIndex &current, const QModelInd
 
     // display filename in status bar for confirmation
     ui->statusBar->showMessage(QString("Selected %1").arg(image->filename()), 4000);
+
+    // show the image, if it is available
+    ui->lblSelectedFile->setPixmap(image->pixmap());
 }
