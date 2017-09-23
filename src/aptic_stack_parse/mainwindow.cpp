@@ -30,15 +30,22 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpen_triggered()
 {
+    // confirm we are opening by updating status
     ui->statusBar->showMessage(tr("Selecting files..."), 4000);
+    // open the file dialog
     QStringList files = QFileDialog::getOpenFileNames(
                               this,
                               "Select one or more files to open",
                               "/home",
                               "Images (*.png *.xpm *.jpg *.tif)");
 
+    // renew the stack
     m_images->setFileNames(files);
+
+    // refresh the list view on the left to show the latest filenames
     m_imageListView->updateStack(m_images);
+
+    // clear the status bar
     ui->statusBar->clearMessage();
 }
 
