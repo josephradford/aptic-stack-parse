@@ -11,22 +11,18 @@ ImageStackListModel::ImageStackListModel(QObject *parent)
 
 QVariant ImageStackListModel::data(const QModelIndex &index, int role) const
 {
-    if (!m_stack) {
-        // this not valid, return empty variant
-        return QVariant();
-    }
-
-    if (index.row() >= this->rowCount(index)) {
-        // row is too big.
-        return QVariant();
-    }
-
     if (role != Qt::DisplayRole) {
         // not returning anything other than the raw data for now
         return QVariant();
     }
 
-    return QVariant(m_stack->imageAt(index.row())->filename());
+    ImageObject *image = imageData(index);
+    if (!image) {
+        // not valid object, return
+        return QVariant();
+    }
+
+    return QVariant(image->filename());
 }
 
 int ImageStackListModel::rowCount(const QModelIndex &parent) const
