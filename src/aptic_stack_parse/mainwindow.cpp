@@ -18,6 +18,9 @@ MainWindow::MainWindow(QWidget *parent) :
     m_images = new ImageStack();
     m_imageListView = new ImageStackListModel();
     ui->listViewFiles->setModel(m_imageListView);
+
+    connect(ui->listViewFiles->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this, SLOT(setFileListSelected(QModelIndex,QModelIndex)));
 }
 
 MainWindow::~MainWindow()
@@ -39,9 +42,11 @@ void MainWindow::on_actionOpen_triggered()
     ui->statusBar->clearMessage();
 }
 
-void MainWindow::on_listViewFiles_clicked(const QModelIndex &index)
+
+void MainWindow::setFileListSelected(const QModelIndex &current, const QModelIndex &previous)
 {
-    ImageObject *image = m_imageListView->imageData(index);
+    Q_UNUSED(previous)
+    ImageObject *image = m_imageListView->imageData(current);
 
     if (!image) {
         // not a valid entry in the list
@@ -50,6 +55,4 @@ void MainWindow::on_listViewFiles_clicked(const QModelIndex &index)
 
     // display filename in status bar for confirmation
     ui->statusBar->showMessage(QString("Selected %1").arg(image->filename()), 4000);
-
-
 }

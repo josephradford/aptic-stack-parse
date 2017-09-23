@@ -21,8 +21,7 @@ public:
 private slots:
     void on_actionOpen_triggered();
 
-    void on_listViewFiles_clicked(const QModelIndex &index);
-
+    void setFileListSelected(const QModelIndex &current, const QModelIndex &previous);
 private:
     Ui::MainWindow *ui;
 
