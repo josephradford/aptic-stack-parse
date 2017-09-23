@@ -15,6 +15,10 @@ public:
 
     void setFileNames(const QStringList &filenames);
 
+    int count() const { return m_images.count(); }
+
+    ImageObject * imageAt(int idx) const { return m_images[idx]; }
+
 private:
     QList<ImageObject*> m_images;
 };
