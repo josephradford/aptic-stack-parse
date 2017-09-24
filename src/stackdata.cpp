@@ -12,6 +12,18 @@ StackData::StackData()
     m_columns = 0;
 }
 
+unsigned char StackData::data(int column, int row, int sample) const
+{
+    size_t idx = column + (row * m_columns) + (sample * m_columns * m_rows);
+
+    if (idx < m_data.size()) {
+        return m_data[idx];
+    }
+
+    // otherwise the index was invalid, so return 0
+    return 0;
+}
+
 void StackData::setStackArray(const QList<ImageObject *> &images)
 {
     // go through all the images in the stack and create a 3D greyscale array

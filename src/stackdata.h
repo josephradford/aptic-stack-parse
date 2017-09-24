@@ -11,7 +11,7 @@ class StackData
 public:
     StackData();
 
-    unsigned char data(int row, int column, int sample) const;
+    unsigned char data(int column, int row, int sample) const;
 
     int samples() const { return m_samples; }
     int rows()    const { return m_rows; }
