@@ -27,11 +27,13 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     imagestack.cpp \
     imageobject.cpp \
-    imagestacklistmodel.cpp
+    imagestacklistmodel.cpp \
+    stackdata.cpp
 
 HEADERS  += mainwindow.h \
     imagestack.h \
     imageobject.h \
-    imagestacklistmodel.h
+    imagestacklistmodel.h \
+    stackdata.h
 
 FORMS    += mainwindow.ui
