@@ -20,4 +20,7 @@ void ImageStack::setFileNames(const QStringList &filenames)
 
     qDebug() << filenames;
     qDebug() << "added to list: " << m_images.count();
+
+    // convert stack into a 3D greyscale array
+    //m_images.at(0)->pixmap().toImage().
 }
