@@ -24,7 +24,7 @@ public:
 
     ImageObject * imageAt(int idx) const { return m_images[idx]; }
 
-    StackData stack() const { return m_stackArray; }
+    StackData const & stack() const { return m_stackArray; }
 
 private:
     QList<ImageObject*> m_images;
