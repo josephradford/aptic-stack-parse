@@ -71,16 +71,16 @@ void MainWindow::on_actionOpen_triggered()
     }
 
     // test - pixmap of stack
-    QImage img(512, 512, QImage::Format_Grayscale8);
-    for (int i = 0; i < 512; i++) {
-        for (int j = 0; j < 512; j++) {
-            quint8 temp8 = m_images->stack().data(i, j, 0);
-            qDebug() << temp8;
-            QRgb rgb = qRgb(temp8,temp8,temp8);
-            img.setPixel(i, j, rgb);
-        }
-    }
-    ui->lblSelectedFile->setPixmap(QPixmap::fromImage(img));
+//    QImage img(512, 512, QImage::Format_Grayscale8);
+//    for (int i = 0; i < 512; i++) {
+//        for (int j = 0; j < 512; j++) {
+//            quint8 temp8 = m_images->stack().data(i, j, 0);
+//            qDebug() << temp8;
+//            QRgb rgb = qRgb(temp8,temp8,temp8);
+//            img.setPixel(i, j, rgb);
+//        }
+//    }
+//    ui->lblSelectedFile->setPixmap(QPixmap::fromImage(img));
 }
 
 
@@ -98,5 +98,5 @@ void MainWindow::setFileListSelected(const QModelIndex &current, const QModelInd
     ui->statusBar->showMessage(QString("Selected %1").arg(image->filename()), 4000);
 
     // show the image, if it is available
-    //ui->lblSelectedFile->setPixmap(image->pixmap());
+    ui->lblSelectedFile->setPixmap(image->pixmap());
 }
