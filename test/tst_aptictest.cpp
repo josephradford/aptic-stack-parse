@@ -21,6 +21,6 @@ void ApticTest::testCase1()
     QVERIFY2(true, "Failure");
 }
 
-QTEST_APPLESS_MAIN(ApticTest)
+QTEST_MAIN(ApticTest)
 
 #include "tst_aptictest.moc"
