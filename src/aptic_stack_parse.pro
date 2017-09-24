@@ -22,19 +22,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-INCLUDEPATH += aptic_image/
+include(ApticImage/apticimage.pri)
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    aptic_image/imagestack.cpp \
-    aptic_image/imageobject.cpp \
-    imagestacklistmodel.cpp \
-    aptic_image/stackdata.cpp
+    imagestacklistmodel.cpp
 
 HEADERS  += mainwindow.h \
-    aptic_image/imagestack.h \
-    aptic_image/imageobject.h \
-    imagestacklistmodel.h \
-    aptic_imagestackdata.h
+    imagestacklistmodel.h
 
 FORMS    += mainwindow.ui
