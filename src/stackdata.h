@@ -2,6 +2,7 @@
 #define STACKDATA_H
 
 #include <QList>
+#include <vector> // vector was very slow until this include, does QList use an old vector library?
 
 class QImage;
 class ImageObject;
