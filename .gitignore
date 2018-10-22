@@ -39,3 +39,7 @@ CMakeLists.txt.user*
 
 
 doc/image/stack1/
+
+tools/\.vscode/
+
+tools/__pycache__/
