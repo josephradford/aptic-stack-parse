@@ -10,16 +10,52 @@ __license__ = "GPL-3.0"
 __maintainer__ = "Joseph Radford"
 __email__ = "joeradford@gmail.com"
 
-def create_flash_coords(image_shape, num_flashes, flash_radius):
+class FlashObject(object):
+    """
+    FlashObject contains all information about a flash in the image stack
+    coordinates is (x,y) or (col,row)
+    """
+    def __init__(self, coordinates, radius, duration):
+        self.coordinates = coordinates
+        self.radius      = radius
+        self.duration    = duration
+
+class FlashList(object):
+    def __init__(self):
+        self.min_row = np.NaN
+        self.max_row = np.NaN
+        self.min_col = np.NaN
+        self.max_col = np.NaN
+        self.flashes = []
+
+    def add_flash(self, coordinates, radius, duration):
+        self.flashes.append(FlashObject(coordinates,radius,duration))
+        col = coordinates[0]
+        row = coordinates[1]
+        if (np.isnan(self.min_row) or self.min_row > row):
+            self.min_row = row
+        if (np.isnan(self.max_row) or self.max_row < row):
+            self.max_row = row
+        if (np.isnan(self.min_col) or self.min_col > col):
+            self.min_col = col
+        if (np.isnan(self.max_col) or self.max_col < col):
+            self.max_col = col
+
+    def length(self):
+        return len(self.flashes)
+
+def create_flash_coords(image_shape, num_flashes, flash_radius, duration=1):
     """
     Create an array of coordinates within the image_shape (width, height)
     Array is (num_flashes,2), with [col,row]
     """
-    flash_coords = np.empty((num_flashes,2), dtype=int)
+    flashes = FlashList()
     for i in range(num_flashes):
-        flash_coords[i][0] = random.randint(flash_radius, image_shape[0] - flash_radius - 1)
-        flash_coords[i][1] = random.randint(flash_radius, image_shape[1] - flash_radius - 1)
-    return flash_coords
+        flashes.add_flash((random.randint(flash_radius, image_shape[0] - flash_radius - 1),
+                           random.randint(flash_radius, image_shape[1] - flash_radius - 1)),
+                          flash_radius, duration)
+    return flashes
+
 
 def main():
     input_width = 20
