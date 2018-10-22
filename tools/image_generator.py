@@ -56,6 +56,10 @@ def create_flash_coords(image_shape, num_flashes, flash_radius, duration=1):
                           flash_radius, duration)
     return flashes
 
+def create_flash_array(flash_radius):
+    A = np.arange(-flash_radius,flash_radius+1,dtype='uint8')**2
+    dists = np.sqrt(A[:,None] + A)
+    return (dists-flash_radius<=0.0).astype('uint8')*255
 
 def main():
     input_width = 20
