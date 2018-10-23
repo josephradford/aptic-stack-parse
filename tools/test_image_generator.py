@@ -42,7 +42,7 @@ class TestImageGenerator(unittest.TestCase):
         flash_coords = create_flash_coords((5,5), num_flashes, 0)
         self.assertEqual(flash_coords.length(), num_flashes)
 
-    def test_flash_shape(self):
+    def test_flash_shape_2(self):
         flash_radius = 2
         flash_array = create_flash_array(flash_radius)
         flash_array_test = np.array([[  0,   0, 255,   0,   0],
@@ -51,6 +51,29 @@ class TestImageGenerator(unittest.TestCase):
                                      [  0, 255, 255, 255,   0],
                                      [  0,   0, 255,   0,   0]])
         self.assertTrue(np.allclose(flash_array, flash_array_test))
+
+    def test_flash_shape_1(self):
+        flash_radius = 1
+        flash_array = create_flash_array(flash_radius)
+        flash_array_test = np.array([[  0, 255,   0],
+                                     [255, 255, 255],
+                                     [  0, 255,   0]])
+        self.assertTrue(np.allclose(flash_array, flash_array_test))
+
+    def test_image_size(self):
+        image_shape = (5,5)
+        flash_coords = create_flash_coords(image_shape, 1, 0)
+        imdata = create_image(image_shape, flash_coords)
+        self.assertEqual(imdata.shape, image_shape)
+
+    def test_image_flash_location(self):
+        flash_coords = FlashList()
+        flash_coords.add_flash((2, 2), 1, 0)
+        imdata = create_image((5,5), flash_coords)
+        flash_array_test = np.array([[  0, 255,   0],
+                                     [255, 255, 255],
+                                     [  0, 255,   0]])
+        self.assertTrue(np.allclose(imdata[1:4,1:4], flash_array_test))
 
 
 if __name__ == '__main__':
