@@ -69,10 +69,10 @@ def create_flash_array(flash_radius):
 def create_image(image_shape, flashes):
     imdata = np.zeros(image_shape, dtype='uint8')
 
-    for i in range(flashes.length()):
-        flash_radius = flashes.flashes[i].radius
-        col_fl = flashes.flashes[i].coordinates[0]
-        row_fl = flashes.flashes[i].coordinates[1]
+    for flash in flashes.flashes:
+        flash_radius = flash.radius
+        col_fl = flash.coordinates[0]
+        row_fl = flash.coordinates[1]
         imdata[col_fl-flash_radius:col_fl+flash_radius+1, 
                row_fl-flash_radius:row_fl+flash_radius+1] = create_flash_array(flash_radius)
 
