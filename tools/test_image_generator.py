@@ -7,7 +7,7 @@ class TestImageGenerator(unittest.TestCase):
         width = 2
         max_col = width - 1
         min_col = 0
-        flash_coords = create_flash_coords((width,5), 40, 0)
+        flash_coords = create_flash_coords((width,5), 40, 0, 1, (1, 1))
         self.assertLessEqual(   flash_coords.max_col, max_col)
         self.assertGreaterEqual(flash_coords.min_col, min_col)
         
@@ -16,7 +16,7 @@ class TestImageGenerator(unittest.TestCase):
         flash_radius = 2
         max_col = width - flash_radius - 1
         min_col = flash_radius
-        flash_coords = create_flash_coords((width,5), 40, flash_radius)
+        flash_coords = create_flash_coords((width,5), 40, flash_radius, 1, (1, 1))
         self.assertLessEqual(   flash_coords.max_col, max_col)
         self.assertGreaterEqual(flash_coords.min_col, min_col)
         
@@ -24,7 +24,7 @@ class TestImageGenerator(unittest.TestCase):
         height = 2
         max_row = height - 1
         min_row = 0
-        flash_coords = create_flash_coords((5,height), 40, 0)
+        flash_coords = create_flash_coords((5,height), 40, 0, 1, (1, 1))
         self.assertLessEqual(   flash_coords.max_row, max_row)
         self.assertGreaterEqual(flash_coords.min_row, min_row)
 
@@ -33,13 +33,13 @@ class TestImageGenerator(unittest.TestCase):
         flash_radius = 1
         max_row = height - flash_radius - 1
         min_row = flash_radius
-        flash_coords = create_flash_coords((5,height), 40, flash_radius)
+        flash_coords = create_flash_coords((5,height), 40, flash_radius, 1, (1, 1))
         self.assertLessEqual(   flash_coords.max_row, max_row)
         self.assertGreaterEqual(flash_coords.min_row, min_row)
 
     def test_num_flashes(self):
         num_flashes = 20
-        flash_coords = create_flash_coords((5,5), num_flashes, 0)
+        flash_coords = create_flash_coords((5,5), num_flashes, 0, 1, (1, 1))
         self.assertEqual(flash_coords.length(), num_flashes)
 
     def test_flash_shape_2(self):
@@ -62,18 +62,40 @@ class TestImageGenerator(unittest.TestCase):
 
     def test_image_size(self):
         image_shape = (5,5)
-        flash_coords = create_flash_coords(image_shape, 1, 0)
+        flash_coords = create_flash_coords(image_shape, 1, 0, 1, (1, 1))
         imdata = create_image(image_shape, flash_coords)
         self.assertEqual(imdata.shape, image_shape)
 
     def test_image_flash_location(self):
         flash_coords = FlashList()
-        flash_coords.add_flash((2, 2), 1, 0)
+        flash_coords.add_flash((2, 2), 1, 0, 1)
         imdata = create_image((5,5), flash_coords)
         flash_array_test = np.array([[  0, 255,   0],
                                      [255, 255, 255],
                                      [  0, 255,   0]])
         self.assertTrue(np.allclose(imdata[1:4,1:4], flash_array_test))
+
+    def test_flash_frame_start(self):
+        max_duration = 5
+        num_frames = 10
+        max_frame_start = num_frames - max_duration
+        flash_coords = create_flash_coords((1,1), 40, 0, num_frames, (1, max_duration))
+        for flash in flash_coords.flashes:
+            self.assertLessEqual(flash.frame_start, max_frame_start)
+        
+    def test_flash_duration(self):
+        max_duration = 5
+        flash_coords = create_flash_coords((1,1), 40, 0, 10, (1, max_duration))
+        for flash in flash_coords.flashes:
+            self.assertLessEqual(flash.duration, max_duration)
+    
+    def test_flash_frame_start_duration_overflow(self):
+        num_frames = 10
+        for max_duration in range(1,num_frames):
+            with self.subTest(max_duration=max_duration):
+                flash_coords = create_flash_coords((1,1), 40, 0, num_frames, (1, max_duration))
+                for flash in flash_coords.flashes:
+                    self.assertLessEqual(flash.frame_start + flash.duration, num_frames)
 
 
 if __name__ == '__main__':

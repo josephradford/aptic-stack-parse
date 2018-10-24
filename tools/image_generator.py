@@ -14,10 +14,13 @@ class FlashObject(object):
     """
     FlashObject contains all information about a flash in the image stack
     coordinates is (x,y) or (col,row)
+    radius is the (rough) circle made around the coordinates
+    frame_start and duration is when in the stack the flash begins and how long it stays for
     """
-    def __init__(self, coordinates, radius, duration):
+    def __init__(self, coordinates, radius, frame_start, duration):
         self.coordinates = coordinates
         self.radius      = radius
+        self.frame_start = frame_start
         self.duration    = duration
 
 class FlashList(object):
@@ -28,8 +31,8 @@ class FlashList(object):
         self.max_col = np.NaN
         self.flashes = []
 
-    def add_flash(self, coordinates, radius, duration):
-        self.flashes.append(FlashObject(coordinates,radius,duration))
+    def add_flash(self, coordinates, radius, frame_start, duration):
+        self.flashes.append(FlashObject(coordinates, radius, frame_start, duration))
         col = coordinates[0]
         row = coordinates[1]
         if (np.isnan(self.min_row) or self.min_row > row):
@@ -44,7 +47,7 @@ class FlashList(object):
     def length(self):
         return len(self.flashes)
 
-def create_flash_coords(image_shape, num_flashes, flash_radius, duration=1):
+def create_flash_coords(image_shape, num_flashes, flash_radius, num_frames, flash_duration_range):
     """
     Create an array of coordinates within the image_shape (width, height)
     Array is (num_flashes,2), with [col,row]
@@ -53,7 +56,9 @@ def create_flash_coords(image_shape, num_flashes, flash_radius, duration=1):
     for i in range(num_flashes):
         flashes.add_flash((random.randint(flash_radius, image_shape[0] - flash_radius - 1),
                            random.randint(flash_radius, image_shape[1] - flash_radius - 1)),
-                          flash_radius, duration)
+                          flash_radius, 
+                          random.randint(0, num_frames - flash_duration_range[1]),
+                          random.randint(flash_duration_range[0], flash_duration_range[1]))
     return flashes
 
 def create_flash_array(flash_radius):
