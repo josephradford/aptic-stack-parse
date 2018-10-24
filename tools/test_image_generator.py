@@ -63,17 +63,23 @@ class TestImageGenerator(unittest.TestCase):
     def test_image_size(self):
         image_shape = (5,5)
         flash_coords = create_flash_coords(image_shape, 1, 0, 1, (1, 1))
-        imdata = create_image(image_shape, flash_coords)
+        imdata = create_image(image_shape, flash_coords, 0)
         self.assertEqual(imdata.shape, image_shape)
 
     def test_image_flash_location(self):
         flash_coords = FlashList()
         flash_coords.add_flash((2, 2), 1, 0, 1)
-        imdata = create_image((5,5), flash_coords)
+        imdata = create_image((5,5), flash_coords, 0)
         flash_array_test = np.array([[  0, 255,   0],
                                      [255, 255, 255],
                                      [  0, 255,   0]])
         self.assertTrue(np.allclose(imdata[1:4,1:4], flash_array_test))
+
+    def test_out_of_frame_flash_not_in_image(self):
+        flash_coords = FlashList()
+        flash_coords.add_flash((1, 1), 1, 0, 1)
+        imdata = create_image((3,3), flash_coords, 1)
+        self.assertTrue(np.allclose(imdata, np.zeros((3,3), dtype='uint8')))
 
     def test_flash_frame_start(self):
         max_duration = 5
@@ -96,6 +102,14 @@ class TestImageGenerator(unittest.TestCase):
                 flash_coords = create_flash_coords((1,1), 40, 0, num_frames, (1, max_duration))
                 for flash in flash_coords.flashes:
                     self.assertLessEqual(flash.frame_start + flash.duration, num_frames)
+
+    def test_flash_is_in_frame(self):
+        flash = FlashObject((1,1), 0, 3, 3)
+        for frame in range(0,10):
+            if frame >= 3 and frame < 6:
+                self.assertTrue(flash.is_in_frame(frame))
+            else:
+                self.assertFalse(flash.is_in_frame(frame))
 
 
 if __name__ == '__main__':

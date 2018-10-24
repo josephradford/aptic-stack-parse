@@ -23,6 +23,12 @@ class FlashObject(object):
         self.frame_start = frame_start
         self.duration    = duration
 
+    def is_in_frame(self, frame):
+        if frame >= self.frame_start:
+            if (frame - self.frame_start) < self.duration:
+                return True
+        return False
+
 class FlashList(object):
     def __init__(self):
         self.min_row = np.NaN
@@ -66,10 +72,12 @@ def create_flash_array(flash_radius):
     dists = np.sqrt(A[:,None] + A)
     return (dists-flash_radius<=0.0).astype('uint8')*255
 
-def create_image(image_shape, flashes):
+def create_image(image_shape, flashes, frame):
     imdata = np.zeros(image_shape, dtype='uint8')
 
     for flash in flashes.flashes:
+        if flash.is_in_frame(frame) == False:
+            continue
         flash_radius = flash.radius
         col_fl = flash.coordinates[0]
         row_fl = flash.coordinates[1]
