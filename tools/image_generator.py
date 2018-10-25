@@ -86,6 +86,12 @@ def create_image(image_shape, flashes, frame):
 
     return imdata
 
+def create_image_stack(image_shape, num_frames, flashes):
+    imdata = np.zeros((image_shape[0], image_shape[1], num_frames), dtype='uint8')
+    for i in range(num_frames):
+        imdata[:,:,i] = create_image(image_shape, flashes, i)
+    return imdata
+
 def main():
     input_width = 20
     input_height = 20

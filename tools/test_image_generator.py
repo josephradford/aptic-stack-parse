@@ -111,6 +111,29 @@ class TestImageGenerator(unittest.TestCase):
             else:
                 self.assertFalse(flash.is_in_frame(frame))
 
+    def test_image_stack_shape(self):
+        flashes = FlashList()
+        max_dim = 10
+        for x in range(1,max_dim):
+            for y in range(1,max_dim):
+                for n in range(1,max_dim):
+                    with self.subTest(x=x,y=y,n=n):
+                        imdata = create_image_stack((x,y), n, flashes)
+                        self.assertEqual(imdata.shape, (x,y,n))
+
+    def test_image_stack_flash_frame(self):
+        flashes = FlashList()
+        frame_start = 3
+        duration = 2
+        num_frames = 10
+        flashes.add_flash((2, 2), 0, frame_start, duration)
+        imdata = create_image_stack((3,3), num_frames, flashes)
+        for frame in range(0,10):
+            if frame >= frame_start and frame < frame_start + duration:
+                self.assertEqual(imdata[2,2,frame], 255)
+            else:
+                self.assertEqual(imdata[2,2,frame], 0)
+
 
 if __name__ == '__main__':
     unittest.main(exit=False)
