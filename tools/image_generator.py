@@ -4,6 +4,7 @@
 import random
 from PIL import Image
 import numpy as np
+import argparse
 
 __author__ = "Joseph Radford"
 __license__ = "GPL-3.0"
@@ -92,13 +93,31 @@ def create_image_stack(image_shape, num_frames, flashes):
         imdata[:,:,i] = create_image(image_shape, flashes, i)
     return imdata
 
-def main():
-    input_width = 20
-    input_height = 20
-    input_num_flashes = 2
-    input_flash_radius = 2
-    flash_coords = create_flash_coords((input_width, input_height), input_num_flashes, input_flash_radius)
+def generate_image_stack(height, width, frames, flashes, flash_radius):
+    flash_coords = create_flash_coords((width, height), 
+                                       flashes, 
+                                       flash_radius,
+                                       frames,
+                                       (3, 5))
+    imdata = create_image_stack((width, height), frames, flash_coords)
+    
+    for i in range(0,frames):
+        im2 = Image.fromarray(imdata[:,:,i], mode="L")
+        im2.save("test_{0}.bmp".format(i), format="BMP")
+        #im2.save("test_{0}.jpg".format(i), format="JPEG")
+
+def create_parser():
+    parser = argparse.ArgumentParser(description='Create an image stack with some flashes.')
+    parser.add_argument('height', type=int, help='the height of the image')
+    parser.add_argument('width', type=int, help ='the width of the image')
+    parser.add_argument('frames', type=int, help = 'the number of frames in the image stack')
+    parser.add_argument('flashes', type=int, help='the number of flashes across the stack')
+    parser.add_argument('flash_radius', type=int, help='the size of the flashes to generate')
+    return parser
+
 
 if __name__== "__main__":
-    main()
+    parser = create_parser()
+    args = parser.parse_args()
+    generate_image_stack(args.height, args.width, args.frames, args.flashes, args.flash_radius)
 

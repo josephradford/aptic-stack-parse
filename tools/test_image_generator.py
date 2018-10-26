@@ -134,6 +134,17 @@ class TestImageGenerator(unittest.TestCase):
             else:
                 self.assertEqual(imdata[2,2,frame], 0)
 
+    def test_parse_args(self):
+        parser = create_parser()
+        parsed = parser.parse_args(['1', '2', '3', '4', '5'])
+        self.assertEqual(parsed.height, 1)
+        self.assertEqual(parsed.width, 2)
+        self.assertEqual(parsed.frames, 3)
+        self.assertEqual(parsed.flashes, 4)
+        self.assertEqual(parsed.flash_radius, 5)
+
+    def test_generate_image_stack(self):
+        self.skipTest('Test that generate_image_stack saves files correctly')
 
 if __name__ == '__main__':
     unittest.main(exit=False)
